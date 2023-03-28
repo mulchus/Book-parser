@@ -22,6 +22,10 @@ def get_books_urls(page_of_category_url, start_page, end_page):
             try:
                 current_page = parse.urljoin(page_of_category_url, str(page))
                 category_page = functions.get_page(current_page)
+                category_content = BeautifulSoup(category_page.text, 'lxml')
+                for table in category_content.select('div#content table'):
+                    book_url = parse.urljoin(site_url, table.select_one('a')['href'])
+                    books_urls.append(book_url)
                 break
             except requests.exceptions.HTTPError as error:
                 print(f'Ошибка ссылки на категорию книг. Ошибка {error}')
@@ -31,8 +35,4 @@ def get_books_urls(page_of_category_url, start_page, end_page):
                 time.sleep(1)
                 continue
 
-        category_content = BeautifulSoup(category_page.text, 'lxml')
-        for table in category_content.select('div#content table'):
-            book_url = parse.urljoin(site_url, table.select_one('a')['href'])
-            books_urls.append(book_url)
     return books_urls
