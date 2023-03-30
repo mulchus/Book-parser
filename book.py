@@ -16,14 +16,16 @@ def get_book(book_page_url, parser_args):
 
     if not parser_args.skip_txt:
         txt_book = functions.get_page(book_file_basis_url, {'id': book_id})
-        filepath = functions.save_txt_file(txt_book, f'{book_id}.{about_book["title"]}',
-                                           Path.joinpath(parser_args.dest_folder, main.FILE_DIR))
-        about_book['book_path'] = filepath.replace('\\', '/')
+        filepath, filename = functions.save_txt_file(txt_book, f'{book_id}.{about_book["title"]}',
+                                                     Path.joinpath(parser_args.dest_folder, main.FILE_DIR))
+        relative_path = str(Path(main.FILE_DIR).joinpath(f'{filename}.txt')).replace('\\', '/')
+        about_book['book_path'] = relative_path
 
     if not parser_args.skip_imgs:
-        imgpath = functions.download_image(about_book['img_scr'],
-                                           Path.joinpath(parser_args.dest_folder, main.IMAGE_DIR))
-        about_book['img_scr'] = imgpath.replace('\\', '/')
+        filename = functions.download_image(about_book['img_scr'],
+                                            Path.joinpath(parser_args.dest_folder, main.IMAGE_DIR))
+        img_relative_path = str(Path(main.IMAGE_DIR).joinpath(filename)).replace('\\', '/')
+        about_book['img_scr'] = img_relative_path
 
     return filepath, about_book
 

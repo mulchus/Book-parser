@@ -26,7 +26,7 @@ def download_image(img_url, folder='Images'):
     check_for_redirect(image)
     with open(filepath, 'wb') as file:
         file.write(image.content)
-        return filepath
+        return filename
 
 
 def save_txt_file(txt_book, filename, folder):
@@ -35,4 +35,4 @@ def save_txt_file(txt_book, filename, folder):
     filepath = os.path.join(folder, f'{filename}.txt')
     with open(filepath, 'wb') as file:
         file.write(txt_book.content)
-    return filepath
+    return filepath, filename
